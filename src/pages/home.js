@@ -1,13 +1,14 @@
 // npm packages
 import React, {Component} from 'react';
 import {Observable} from 'rxjs';
+import _ from 'lodash';
 
 // our packages
 import db from '../db';
 import {Crunchyroll} from '../api';
 import Series from '../components/series';
 
-export default class Home extends React.Component {
+export default class Home extends Component {
   constructor(props) {
     super(props);
 
@@ -41,6 +42,15 @@ export default class Home extends React.Component {
 
   render() {
     const {series} = this.state;
-    return <div>{series.map(s => <Series key={s._id} series={s} />)}</div>;
+    return (
+      <div>
+        {_.chunk(series, 4).map((chunk, i) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <div key={`chunk_${i}`} className="columns">
+            {chunk.map(s => <Series key={s._id} series={s} />)}
+          </div>
+        ))}
+      </div>
+    );
   }
 }
