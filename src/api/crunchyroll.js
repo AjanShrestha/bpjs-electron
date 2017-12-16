@@ -9,7 +9,7 @@ import db from '../db';
 const baseURL = 'http://www.crunchyroll.com';
 
 // main module
-export const Crunchyroll = {
+const Crunchyroll = {
   async getAllSeries(page = 0) {
     // load catalogue
     // http://www.crunchyroll.com/videos/anime/popular/ajax_page?pg=1
@@ -24,7 +24,8 @@ export const Crunchyroll = {
         // get title & url
         const a = $('a', element);
         const title = a.attr('title');
-        const url = `${baseURL}${a.attr('href')}`;
+        const id = a.attr('href');
+        const url = `${baseURL}${id}`;
         // get image
         const img = $('img', element);
         const image = img.attr('src');
@@ -40,10 +41,12 @@ export const Crunchyroll = {
         );
         // return series data;
         return {
+          id,
           title,
           url,
           image,
           count,
+          source: 'crunchyroll',
         };
       })
       .get();
@@ -53,8 +56,42 @@ export const Crunchyroll = {
 
     return series;
   },
-  getEpisodes(series) {},
+  async getEpisodes(series) {
+    // load episodes
+    const {data} = await axios.get(series.url);
+    // create cheerio cursor
+    const $ = cheerio.load(data);
+    const episodesContainer = $('.list-of-seasons ul.portrait-grid');
+    const episodes = $('.group-item', episodesContainer)
+      .map((index, el) => {
+        const element = $(el);
+        const id = $('a.episode', element).attr('href');
+        const url = `${baseURL}${id}`;
+        const img = $('img', element);
+        const image = img.attr('src') || img.attr('data-thumbnailurl');
+        const title = $('.series-title', element)
+          .text()
+          .trim();
+        const description = $('.short-desc', element)
+          .text()
+          .trim();
+        return {
+          id,
+          url,
+          image,
+          title,
+          description,
+        };
+      })
+      .get();
+
+    // store in the db
+    await db.episodes.bulkDocs(episodes);
+
+    return episodes;
+  },
   getEpisode(episode) {},
   getMySeries() {},
   search(query) {},
 };
+export default Crunchyroll;

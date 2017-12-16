@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter as Router, Route, Link, Switch} from 'react-router-dom';
+import {HashRouter as Router, Route, Switch} from 'react-router-dom';
 
 // pages
 import Home from './pages/home';
-import Other from './pages/other';
+import Series from './pages/series';
 
 // render on page
 ReactDOM.render(
@@ -12,7 +12,7 @@ ReactDOM.render(
     <div className="container is-fluid">
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/other" component={Other} />
+        <Route exact path="/series/:id" component={Series} />
         <Route component={Home} />
       </Switch>
     </div>

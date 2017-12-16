@@ -1,3 +1,9 @@
-import {SeriesPropType, SeriesDefaultPropType} from './modelPropType';
-
-export {SeriesPropType, SeriesDefaultPropType};
+export {
+  SeriesPropType,
+  SeriesDefaultPropType,
+  MatchPropType,
+  LocationPropType,
+  HistoryPropType,
+  EpisodeDefaultProp,
+  EpisodePropType,
+} from './modelPropType';

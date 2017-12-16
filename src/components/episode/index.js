@@ -4,32 +4,32 @@ import {withRouter} from 'react-router-dom';
 
 // our packages
 import {
-  SeriesPropType,
-  SeriesDefaultPropType,
+  EpisodePropType,
+  EpisodeDefaultProp,
   HistoryPropType,
 } from '../../utils';
 
-const Series = withRouter(({series, history}) => {
-  const openSeriesPage = () => {
+const Episode = withRouter(({episode, history}) => {
+  const openEpisodePage = () => {
     const location = {
-      pathname: `/series${series.id}`,
-      state: series,
+      pathname: `/episode${episode.id}`,
+      state: episode,
     };
     history.push(location);
   };
   return (
     <div className="column">
-      <div className="card" onClick={openSeriesPage} onKeyDown={() => {}}>
+      <div className="card" onClick={openEpisodePage} onKeyDown={() => {}}>
         <div className="card-image">
           <figure className="image">
-            <img src={series.image} alt={series.title} />
+            <img src={episode.image} alt={episode.title} />
           </figure>
         </div>
         <div className="card-content">
           <div className="media">
             <div className="media-content">
-              <p className="title is-4">{series.title}</p>
-              <p className="subtitle is-6">Videos count: {series.count}</p>
+              <p className="title is-4">{episode.title}</p>
+              <p className="subtitle is-6">{episode.description}</p>
             </div>
           </div>
         </div>
@@ -37,12 +37,12 @@ const Series = withRouter(({series, history}) => {
     </div>
   );
 });
-Series.propTypes = {
-  series: SeriesPropType,
+Episode.propTypes = {
+  episode: EpisodePropType,
   history: HistoryPropType,
 };
-Series.defaultProps = {
-  series: SeriesDefaultPropType,
+Episode.defaultProps = {
+  episode: EpisodeDefaultProp,
 };
 
-export default Series;
+export default Episode;
