@@ -12,7 +12,7 @@ import {
 const Series = withRouter(({series, history}) => {
   const openSeriesPage = () => {
     const location = {
-      pathname: `/series${series.id}`,
+      pathname: `/series${series._id}`,
       state: series,
     };
     history.push(location);

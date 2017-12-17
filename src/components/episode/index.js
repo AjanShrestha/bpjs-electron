@@ -12,7 +12,7 @@ import {
 const Episode = withRouter(({episode, history}) => {
   const openEpisodePage = () => {
     const location = {
-      pathname: `/episode${episode.id}`,
+      pathname: `/episode${episode._id}`,
       state: episode,
     };
     history.push(location);

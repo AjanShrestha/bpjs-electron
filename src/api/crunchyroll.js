@@ -24,8 +24,8 @@ const Crunchyroll = {
         // get title & url
         const a = $('a', element);
         const title = a.attr('title');
-        const id = a.attr('href');
-        const url = `${baseURL}${id}`;
+        const _id = a.attr('href');
+        const url = `${baseURL}${_id}`;
         // get image
         const img = $('img', element);
         const image = img.attr('src');
@@ -41,7 +41,7 @@ const Crunchyroll = {
         );
         // return series data;
         return {
-          id,
+          _id,
           title,
           url,
           image,
@@ -65,8 +65,8 @@ const Crunchyroll = {
     const episodes = $('.group-item', episodesContainer)
       .map((index, el) => {
         const element = $(el);
-        const id = $('a.episode', element).attr('href');
-        const url = `${baseURL}${id}`;
+        const _id = $('a.episode', element).attr('href');
+        const url = `${baseURL}${_id}`;
         const img = $('img', element);
         const image = img.attr('src') || img.attr('data-thumbnailurl');
         const title = $('.series-title', element)
@@ -76,7 +76,7 @@ const Crunchyroll = {
           .text()
           .trim();
         return {
-          id,
+          _id,
           url,
           image,
           title,

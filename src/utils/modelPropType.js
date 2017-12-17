@@ -12,7 +12,7 @@ import {
 } from 'prop-types';
 
 export const SeriesPropType = shape({
-  id: string.isRequired,
+  _id: string.isRequired,
   title: string.isRequired,
   image: string.isRequired,
   url: string.isRequired,
@@ -23,7 +23,7 @@ export const SeriesPropType = shape({
 export const SeriesDefaultPropType = {};
 
 export const EpisodePropType = shape({
-  id: string,
+  _id: string,
   title: string.isRequired,
   image: string.isRequired,
   url: string.isRequired,
