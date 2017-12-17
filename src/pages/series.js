@@ -1,5 +1,6 @@
 // npm packages
 import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
 import {Observable} from 'rxjs';
 import _ from 'lodash';
 
@@ -48,6 +49,18 @@ export default class Series extends Component {
     const {episodes} = this.state;
     return (
       <div>
+        <nav className="nav">
+          <div className="nav-left nav-menu">
+            <div className="nav-item">
+              <Link to="/" className=" button">
+                <span className="icon">
+                  <i className="fa fa-arrow-left" />
+                </span>
+                <span>Back</span>
+              </Link>
+            </div>
+          </div>
+        </nav>
         {_.chunk(episodes, 4).map((chunk, i) => (
           // eslint-disable-next-line react/no-array-index-key
           <div key={`chunk_${i}`} className="columns">
