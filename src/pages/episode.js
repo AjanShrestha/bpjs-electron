@@ -1,6 +1,5 @@
 // npm packages
 import React, {Component} from 'react';
-import videojs from 'video.js';
 
 // our packages
 import {Crunchyroll} from '../api';
@@ -11,7 +10,7 @@ export default class Episode extends Component {
 
     this.state = {
       episode: null,
-      filename: null,
+      file: null,
     };
 
     // trigger episode loading
@@ -19,35 +18,41 @@ export default class Episode extends Component {
   }
 
   componentDidUpdate() {
-    const {episode, filename} = this.state;
+    const {episode, file} = this.state;
 
-    if (!episode || !filename) {
+    if (!episode || !file) {
       return;
     }
 
-    videojs('video');
+    videojs('video', {
+      plugins: {
+        ass: {
+          src: file.subtitles,
+        },
+      },
+    });
   }
 
   async init(props) {
     const {location} = props;
-    const filename = await Crunchyroll.getEpisode(location.state);
+    const file = await Crunchyroll.getEpisode(location.state);
     this.setState({
       episode: location.state,
-      filename,
+      file,
     });
   }
 
   render() {
-    const {episode, filename} = this.state;
+    const {episode, file} = this.state;
 
-    if (!episode || !filename) {
+    if (!episode || !file) {
       return <div>Loading...</div>;
     }
     return (
       <div>
         episode video here
         <video id="video" className="video-js" controls autoPlay preload="auto">
-          <source src={filename} type="video/mp4" />
+          <source src={file.url} type={file.type} />
         </video>
       </div>
     );

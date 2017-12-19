@@ -4,10 +4,10 @@ import path from 'path';
 import axios from 'axios';
 import cheerio from 'cheerio';
 import electron from 'electron';
-import {spawn} from 'child_process';
 
 // our packages
 import db from '../db';
+import {dowloadSubtitles, getStreamUrl} from './youtubedl';
 
 // base URL used for most requests
 const baseURL = 'http://www.crunchyroll.com';
@@ -21,7 +21,7 @@ try {
 }
 
 // main module
-const Crunchyroll = {
+export default {
   async getAllSeries(page = 0) {
     // load catalogue
     // http://www.crunchyroll.com/videos/anime/popular/ajax_page?pg=1
@@ -102,31 +102,20 @@ const Crunchyroll = {
 
     return episodes;
   },
-  getEpisode(episode) {
-    return new Promise(resolve => {
-      console.log('loading episode:', episode);
-      const filename = `${episode._id
-        .replace(/^\//g, '')
-        .replace(/\//g, '-')}.mp4`;
-      const dl = spawn(
-        'youtube-dl',
-        ['--write-sub', '--sub-lang', 'enUS', '-o', filename, episode.url],
-        {
-          cwd: targetFolder,
-        }
-      );
-      dl.stderr.on('data', data => {
-        console.log(data.toString());
-      });
-      dl.stdout.on('data', data => {
-        console.log(data.toString());
-      });
-      dl.stdout.on('close', () => {
-        resolve(path.join(targetFolder, filename));
-      });
+  async getEpisode(episode) {
+    const filename = `${episode._id
+      .replace(/^\//g, '')
+      .replace(/\//g, '-')}.mp4`;
+    const subtitles = await dowloadSubtitles({
+      url: episode.url,
+      targetFolder,
+      filename,
     });
+    const url = await getStreamUrl(episode.url);
+    const type = 'application/x-mpegURL';
+
+    return {type, url, subtitles};
   },
   getMySeries() {},
   search(query) {},
 };
-export default Crunchyroll;
