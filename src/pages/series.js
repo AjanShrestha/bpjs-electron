@@ -26,6 +26,8 @@ export default class Series extends Component {
   }
 
   componentDidMount() {
+    const {location} = this.props;
+    const series = location.state;
     this.sub = Observable.fromEvent(
       db.episodes.changes({
         since: 0,
@@ -36,6 +38,7 @@ export default class Series extends Component {
     )
       .filter(change => !change.deleted)
       .map(change => change.doc)
+      .filter(doc => doc.series === series._id)
       .scan((acc, doc) => acc.concat([doc]), [])
       .debounceTime(1000)
       .subscribe(episodes => this.setState({episodes}));
