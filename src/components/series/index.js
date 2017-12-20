@@ -3,6 +3,7 @@ import React from 'react';
 import {withRouter} from 'react-router-dom';
 
 // our packages
+import db from '../../db';
 import {
   SeriesPropType,
   SeriesDefaultPropType,
@@ -10,11 +11,27 @@ import {
 } from '../../utils';
 
 const Series = withRouter(({series, history}) => {
-  const openSeriesPage = () => {
+  const openSeriesPage = async () => {
     const location = {
       pathname: `/series${series._id}`,
       state: series,
     };
+
+    let doc;
+    try {
+      doc = await db.current.get('series');
+    } catch (error) {
+      console.error(error);
+    }
+    const update = {
+      _id: 'series',
+      data: series,
+    };
+    if (doc) {
+      update._rev = doc._rev;
+    }
+    await db.current.put(update);
+
     history.push(location);
   };
   return (

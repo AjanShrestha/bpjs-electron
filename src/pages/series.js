@@ -1,13 +1,12 @@
 // npm packages
+import _ from 'lodash';
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Observable} from 'rxjs';
-import _ from 'lodash';
 
 // our packages
 import db from '../db';
 import {Crunchyroll} from '../api';
-import {LocationPropType} from '../utils';
 
 // our components
 import Episode from '../components/episode';
@@ -21,13 +20,12 @@ export default class Series extends Component {
     };
 
     // trigger episodes loading
-    const {location} = props;
-    Crunchyroll.getEpisodes(location.state);
+    this.init(props);
   }
 
-  componentDidMount() {
-    const {location} = this.props;
-    const series = location.state;
+  async componentDidMount() {
+    const series = await this.getSeries(this.props);
+
     this.sub = Observable.fromEvent(
       db.episodes.changes({
         since: 0,
@@ -46,6 +44,22 @@ export default class Series extends Component {
 
   componentWillUnmount() {
     this.sub.unsubscribe();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async getSeries(props) {
+    const {location} = props;
+    let series = location.state;
+    if (!series) {
+      const {data} = await db.current.get('series');
+      series = data;
+    }
+    return series;
+  }
+
+  async init(props) {
+    const series = await this.getSeries(props);
+    Crunchyroll.getEpisodes(series);
   }
 
   render() {
@@ -74,7 +88,3 @@ export default class Series extends Component {
     );
   }
 }
-Series.propTypes = {
-  // eslint-disable-next-line react/no-typos
-  location: LocationPropType.isRequired,
-};
