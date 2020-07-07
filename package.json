@@ -30,7 +30,7 @@
     "cheerio": "^1.0.0-rc.2",
     "electron": "^7.2.4",
     "font-awesome": "^4.7.0",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.15",
     "pouchdb-browser": "^6.3.4",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
