@@ -28,7 +28,7 @@
     "axios": "^0.21.1",
     "bulma": "^0.6.1",
     "cheerio": "^1.0.0-rc.2",
-    "electron": "^7.2.4",
+    "electron": "^9.4.0",
     "font-awesome": "^4.7.0",
     "lodash": "^4.17.19",
     "pouchdb-browser": "^6.3.4",
